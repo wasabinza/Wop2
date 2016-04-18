@@ -1,0 +1,14 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
+  <StackLayout>
+    <Label text="Tap the button" class="title"/>
+    <SegmentedBar selectedIndex="{{ _categoryIndex }}">
+      <SegmentedBar.items>
+        <SegmentedBarItem title="Travel" />
+        <SegmentedBarItem title="Tech" />
+      </SegmentedBar.items>
+    </SegmentedBar>
+    <TextView text="{{ _post }}" />
+    <Button text="POST" tap="{{ uploadPost }}" />
+    <Label text="{{ message }}" class="message" textWrap="true"/>
+  </StackLayout>
+</Page>
