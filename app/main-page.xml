@@ -9,7 +9,7 @@
     </SegmentedBar>
     <TextView text="{{ _post }}" />
     <Button text="SAVE" tap="{{ storePost }}" />
-    <Button text="POST" tap="{{ uploadPost }}" />
+    <Button text="POST" tap="{{ uploadPosts }}" />
     <Label text="{{ message }}" class="message" textWrap="true"/>
   </StackLayout>
 </Page>
