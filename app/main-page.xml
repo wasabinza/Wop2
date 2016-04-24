@@ -1,5 +1,14 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
   <StackLayout>
+    <ListView items="{{ postList }}" >
+      <ListView.itemTemplate>
+        <StackLayout orientation="horizontal">
+          <Label text="{{ title }}" />
+          <Label text=" {{ authorID, authorID | authorConverter(), false }} " />
+          <Label text="{{ dateTime, dateTime | dateConverter(), false }}" />
+        </StackLayout>
+      </ListView.itemTemplate>
+    </ListView>
     <Button text="New Post" tap="newPost" />
     <Button text="POST" tap="{{ uploadPosts }}" />
     <Label text="{{ message }}" class="message" textWrap="true"/>

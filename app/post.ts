@@ -16,6 +16,14 @@ const authorLookup = {
     /*Ethan*/4: 5
 };
 
+const authorNames = {
+    1: "Shane",
+    2: "Carolyn",
+    3: "Kate",
+    4: "Anna",
+    5: "Ethan"
+};
+
 const indexKey = "postIndexKey";
 
 export class Post extends observable.Observable {
@@ -47,6 +55,27 @@ export class Post extends observable.Observable {
         this.content = "This is the test upload from my NativeScript app";
         this.updateMessage("New post initialised");
     }
+    
+
+    public static deserialise(postData:string):Post {
+        let postFields = JSON.parse(postData);
+        let post = new Post();
+        post.dateTime = new Date(postFields.dateTime);
+        post.title = postFields.title;
+        post.authorID = postFields.authorID;
+        post.category = postFields.category;
+        post.content = postFields.content;
+        return post;
+    }
+
+    public dateConverter(value:Date):string {
+        return value.toLocaleString();
+    }
+
+    public authorConverter(value:number):string {
+        return authorNames[value];
+    }
+
 
     private updateMessage(notice: string) {
         this.message = notice;
@@ -58,12 +87,14 @@ export class Post extends observable.Observable {
         this.category = categoriesLookup[this._categoryIndex];
         this.authorID = authorLookup[this._authorIndex];
         
+        this.dateTime = new Date();
+        
         var timestamp = Date.now();
         var postKey = "postData" + timestamp;
         applicationSettings.setString(postKey, JSON.stringify(this));
         
-        var indexData:string = applicationSettings.getString(indexKey, "[]");
-        var index:Array<string> = JSON.parse(indexData);
+        let indexData:string = applicationSettings.getString(indexKey, "[]");
+        let index:Array<string> = JSON.parse(indexData);
         index.push(postKey);
         applicationSettings.setString(indexKey, JSON.stringify(index));
         this.updateMessage("Stored post " + index.length);

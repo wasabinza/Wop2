@@ -9,6 +9,7 @@ const indexKey = "postIndexKey";
 export class HelloWorldModel extends observable.Observable {
 
     private _message: string;
+    private postList: Array<Post>;
 
     get message(): string {
         return this._message;
@@ -24,12 +25,30 @@ export class HelloWorldModel extends observable.Observable {
         super();
 
         this.updateMessage("Nothing happened just yet");
+        this.showPostList();
     }
 
     private updateMessage(notice: string) {
         this.message = notice;
     }
 
+    private showPostList() {
+        let indexData:string = applicationSettings.getString(indexKey);
+        console.log(indexData);
+        if (indexData) {
+            let index:Array<string> = JSON.parse(indexData);
+            this.postList = index.map((postKey) => {
+                console.log(postKey);
+                var postData = applicationSettings.getString(postKey);
+                if (postData) {
+                    console.log(postData);
+                    let post:Post = Post.deserialise(postData);
+                    return post;
+                }
+                return null;
+            });
+        }        
+    }
 
     private removePostKey(postKey:string) {
         applicationSettings.remove(postKey);
@@ -82,10 +101,10 @@ export class HelloWorldModel extends observable.Observable {
             let index:Array<string> = JSON.parse(indexData);
             for (var postKey of index) {
                 console.log(postKey);
-                var postData = applicationSettings.getString(postKey);
+                let postData = applicationSettings.getString(postKey);
                 if (postData) {
                     console.log(postData);
-                    var post = JSON.parse(postData);
+                    let post = Post.deserialise(postData);
                     this.upload(post, encodedString, postKey);
                 }   
             }

@@ -19,7 +19,13 @@ export function newPost() {
 export function navigatingTo(args: EventData) {
     // Get the event sender
     var page = <Page>args.object;
-    page.bindingContext = new HelloWorldModel();
+    let source = new HelloWorldModel();
+    
+    source.set("dateConverter", function() {
+        return "Hello";
+    });
+    source.set("test", new Date());
+    page.bindingContext = source;
     
     page.on(gestures.GestureTypes.swipe, function (args: SwipeGestureEventData) {
         newPost();        
