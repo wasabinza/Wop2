@@ -1,0 +1,23 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
+  <StackLayout>
+    <TextView text="{{ title }}" class="title"/>
+    <SegmentedBar selectedIndex="{{ _categoryIndex }}">
+      <SegmentedBar.items>
+        <SegmentedBarItem title="Travel" />
+        <SegmentedBarItem title="Tech" />
+      </SegmentedBar.items>
+    </SegmentedBar>
+    <SegmentedBar selectedIndex="{{ _authorIndex }}">
+      <SegmentedBar.items>
+        <SegmentedBarItem title="Shane" />
+        <SegmentedBarItem title="Carolyn" />
+        <SegmentedBarItem title="Kate" />
+        <SegmentedBarItem title="Anna" />
+        <SegmentedBarItem title="Ethan" />
+      </SegmentedBar.items>
+    </SegmentedBar>
+    <TextView text="{{ content }}" />
+    <Button text="Save" tap="{{ storePost }}" />
+    <Label text="{{ message }}" class="message" textWrap="true"/>
+  </StackLayout>
+</Page>

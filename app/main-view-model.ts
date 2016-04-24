@@ -1,28 +1,14 @@
 import observable = require("data/observable");
 import http = require("http");
 import privateData = require("./privateData");
+import { Post } from "./post";
 var applicationSettings = require("application-settings");
-
-const categoriesLookup = {
-    0: 4,
-    1: 3
-};
 
 const indexKey = "postIndexKey";
 
-class Post {
-    title: string;
-    content: string;
-    category: number;
-    dateTime: Date;
-};
-
 export class HelloWorldModel extends observable.Observable {
 
-    private _title: string;
     private _message: string;
-    private _post: string;
-    private _categoryIndex: number;
 
     get message(): string {
         return this._message;
@@ -37,8 +23,6 @@ export class HelloWorldModel extends observable.Observable {
     constructor() {
         super();
 
-        // Initialize default values.
-        this._post = "This is the test upload from my NativeScript app";
         this.updateMessage("Nothing happened just yet");
     }
 
@@ -46,27 +30,6 @@ export class HelloWorldModel extends observable.Observable {
         this.message = notice;
     }
 
-    private storePost() {
-        var category = categoriesLookup[this._categoryIndex];
-        this.updateMessage("Store posting");
-        var post:Post = {
-            title: this._title,
-            category: category,
-            content: this._post,
-            dateTime: new Date()    
-        };
-        
-        var timestamp = Date.now();
-        var postKey = "postData" + timestamp;
-        applicationSettings.setString(postKey, JSON.stringify(post));
-        
-        var indexData:string = applicationSettings.getString(indexKey, "[]");
-        var index:Array<string> = JSON.parse(indexData);
-        index.push(postKey);
-        applicationSettings.setString(indexKey, JSON.stringify(index));
-        this.updateMessage("Stored post " + index.length);
-        console.log("Index length " + index.length);
-    }
 
     private removePostKey(postKey:string) {
         applicationSettings.remove(postKey);
@@ -83,6 +46,7 @@ export class HelloWorldModel extends observable.Observable {
 
     private upload(post:Post, encodedString:string, postKey:string) {
         this.updateMessage("Before posting");
+        console.log("author" + post.authorID);
         http.request({
             url: privateData.baseURL + "/wp/v2/posts",
             method: "POST",
@@ -93,7 +57,8 @@ export class HelloWorldModel extends observable.Observable {
                 status: "publish",
                 content: post.content,
                 categories: [ post.category ],
-                date: post.dateTime
+                date: post.dateTime,
+                author: post.authorID
             })
         }).then((response) => {
             var result = response.content.toJSON();
@@ -119,6 +84,7 @@ export class HelloWorldModel extends observable.Observable {
                 console.log(postKey);
                 var postData = applicationSettings.getString(postKey);
                 if (postData) {
+                    console.log(postData);
                     var post = JSON.parse(postData);
                     this.upload(post, encodedString, postKey);
                 }   

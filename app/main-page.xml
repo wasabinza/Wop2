@@ -1,14 +1,6 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
   <StackLayout>
-    <TextView text="{{ _title }}" class="title"/>
-    <SegmentedBar selectedIndex="{{ _categoryIndex }}">
-      <SegmentedBar.items>
-        <SegmentedBarItem title="Travel" />
-        <SegmentedBarItem title="Tech" />
-      </SegmentedBar.items>
-    </SegmentedBar>
-    <TextView text="{{ _post }}" />
-    <Button text="SAVE" tap="{{ storePost }}" />
+    <Button text="New Post" tap="newPost" />
     <Button text="POST" tap="{{ uploadPosts }}" />
     <Label text="{{ message }}" class="message" textWrap="true"/>
   </StackLayout>
