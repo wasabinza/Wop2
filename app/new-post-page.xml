@@ -1,6 +1,7 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo">
+  <ScrollView>
   <StackLayout>
-    <TextView text="{{ title }}" class="title"/>
+    <TextView text="{{ title }}"/>
     <SegmentedBar selectedIndex="{{ _categoryIndex }}">
       <SegmentedBar.items>
         <SegmentedBarItem title="Travel" />
@@ -16,8 +17,19 @@
         <SegmentedBarItem title="Ethan" />
       </SegmentedBar.items>
     </SegmentedBar>
-    <TextView text="{{ content }}" />
+    <TextView text="{{ content }}" minWidth="200" minHeight="100" />
+    <ListView items="{{ imageList }}">
+        <ListView.itemTemplate>
+            <GridLayout columns="100, auto" rows="*, *, *">
+                <Image rowSpan="3" width="100" height="100" src="{{ thumb }}" />
+                <Label col="1" row="0" text="{{ uri }}" textWrap="true"/>
+                <Label col="1" row="2" text="{{ fileUri }}" />
+            </GridLayout>
+        </ListView.itemTemplate>
+    </ListView>
+    <Button text="Add Pictures" tap="{{ addPictures }}" />
     <Button text="Save" tap="{{ storePost }}" />
     <Label text="{{ message }}" class="message" textWrap="true"/>
   </StackLayout>
+  </ScrollView>
 </Page>

@@ -1,6 +1,7 @@
 import observable = require("data/observable");
 import http = require("http");
 import privateData = require("./privateData");
+var imagepickerModule = require("nativescript-imagepicker");
 var applicationSettings = require("application-settings");
 
 const categoriesLookup = {
@@ -36,6 +37,7 @@ export class Post extends observable.Observable {
     private _authorIndex: number;
     private _categoryIndex: number;
     private _message: string;
+    private imageList;
 
     get message(): string {
         return this._message;
@@ -54,6 +56,7 @@ export class Post extends observable.Observable {
         this.title = "Offline NativeScript Post";
         this.content = "This is the test upload from my NativeScript app";
         this.updateMessage("New post initialised");
+        this.imageList = [];
     }
     
 
@@ -79,6 +82,28 @@ export class Post extends observable.Observable {
 
     private updateMessage(notice: string) {
         this.message = notice;
+    }
+
+    private addPictures() {
+        let context = imagepickerModule.create({
+            mode: "multiple"
+        });
+        context.authorize()
+        .then(() => {
+            return context.present();
+        })
+        .then((selection) => {
+            selection.forEach(function(selected) {
+                console.log("uri: " + selected.uri);           
+                console.log("fileUri: " + selected.fileUri);
+            });
+            console.log("Existing " + this.imageList.length);
+            //let newImageList = this.imageList.concat(selection);
+            this.set("imageList", selection);
+            console.log("new length " + this.imageList.length);           
+        }).catch((e) => {
+            console.log(e);
+        });
     }
 
     private storePost() {
